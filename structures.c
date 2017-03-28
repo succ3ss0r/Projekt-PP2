@@ -1,14 +1,27 @@
-#define LENGTH 20
+/*
 
-struct listOfDistributors{
-    char name[LENGTH];
-    char address[LENGTH];
-    short nip;
-    char phone[11];
-    char email[LENGTH];
+    PLIK ZAWIERAJĄCY STRUKTURY POTRZEBNE DO DZIAŁANIA PROGRAMU
+
+*/
+
+struct listOfPointers {
+
+    
 };
 
-struct listOfClients{
+
+
+struct listOfDistributors {
+    //struktura przeznaczona do trzymania informacji o dostawcach
+    char *name;
+    char *address;
+    short nip;
+    char phone[11];
+    char *email;
+};
+
+struct listOfClients {
+    //struktura przeznaczona do trzymania informacji o klientach
     char name[LENGTH];
     char surname[LENGTH];
     char phone[11];
@@ -16,5 +29,8 @@ struct listOfClients{
 };
 
 struct productElement {
-    
+    //tablica przeznaczona do trzymania informacji o produktach
+    char *name;
+    unsigned int available;
+    unsigned float price;    
 };
