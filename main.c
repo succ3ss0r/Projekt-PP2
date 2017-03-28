@@ -7,8 +7,8 @@ int main()
 {
     listsPointers listy;
     listInitialize(&listy);
-    int elo;
-    menu(elo);
+    int option;
+    menu(option);
 
     return 0;
 }
@@ -21,7 +21,7 @@ void menu(int opt)
     printf("\t4. Usunac dostawce\n");
     while(1)
     {
-        scanf("%d", opt);
+        scanf("%d", &opt);
         printf("Wybrales: %d", opt);
         if(opt>=1 && opt<=4){
             puts("siema");
