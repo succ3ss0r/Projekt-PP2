@@ -1,13 +1,5 @@
-#include <stdio.h>
-#inclide <stdlib.h>
+/*
 
+    PLIK ZAWIERAJĄCY FUNKCJE POTRZEBNE DO OBSŁUGI STANU PRODUKTÓW
 
-
-
-
-
-
-int main(void) {
-
-    return 0;
-}
+*/

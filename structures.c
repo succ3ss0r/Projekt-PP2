@@ -1,36 +1,37 @@
-/*
+//
+//
+//  PLIK ZAWIERAJĄCY STRUKTURY POTRZEBNE DO DZIAŁANIA PROGRAMU
+//
+//
 
-    PLIK ZAWIERAJĄCY STRUKTURY POTRZEBNE DO DZIAŁANIA PROGRAMU
+typedef struct {
+    //struktura przechowujaca wskazniki na listy
+    struct *listOfDistributors distributorsList;
+    struct *listOfClients clientsList;
+    struct *productElement productsList;
 
-*/
+} listsPointers;
 
-struct listOfPointers {
-
-    
-};
-
-
-
-struct listOfDistributors {
+typedef struct {
     //struktura przeznaczona do trzymania informacji o dostawcach
     char *name;
     char *address;
     short nip;
-    char phone[11];
+    char *phone;
     char *email;
-};
+} listOfDistributors;
 
-struct listOfClients {
+typedef struct {
     //struktura przeznaczona do trzymania informacji o klientach
-    char name[LENGTH];
-    char surname[LENGTH];
-    char phone[11];
-    char email[LENGTH];
-};
+    char *name;
+    char *surname;
+    char *phone;
+    char *email;
+} listOfClients;
 
-struct productElement {
+typedef struct {
     //tablica przeznaczona do trzymania informacji o produktach
     char *name;
     unsigned int available;
-    unsigned float price;    
-};
+    unsigned float price;
+} productElement;
