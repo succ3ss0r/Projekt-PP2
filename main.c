@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#include "structures.c"
+
 int main()
 {
     printf("Program obslugi sklepu.\n\n");
