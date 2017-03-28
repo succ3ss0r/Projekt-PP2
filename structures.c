@@ -15,11 +15,14 @@ typedef enum {
 
 typedef struct {
     //struktura przeznaczona do trzymania informacji o dostawcach
+<<<<<<< HEAD
 
     unsigned int distributorID;
     bool state;
 
 
+=======
+>>>>>>> 659b623bd0c91ed1840a38cfed3f37e458c0af34
     char *name;
     char *address;
     short nip;
@@ -29,11 +32,14 @@ typedef struct {
 
 typedef struct {
     //struktura przeznaczona do trzymania informacji o klientach
+<<<<<<< HEAD
 
     unsigned int clientID;
     bool state;
 
 
+=======
+>>>>>>> 659b623bd0c91ed1840a38cfed3f37e458c0af34
     char *name;
     char *surname;
     char *phone;
@@ -44,11 +50,14 @@ typedef struct {
 
 typedef struct {
     //tablica przeznaczona do trzymania informacji o produktach
+<<<<<<< HEAD
 
     unsigned int productID;
     bool state;
 
 
+=======
+>>>>>>> 659b623bd0c91ed1840a38cfed3f37e458c0af34
     char *name;
     unsigned int available;
     float price;
@@ -60,11 +69,12 @@ typedef struct {
     distributor* distributorsList;
     client* clientsList;
     productElement* productsList;
+
 } listsPointers;
 
-void listInitialize(listsPointers *lists) {
-    //FUNKCJA INICJUJĄCA STRUKTURĘ PUSTYCH WSKAŹNIKÓW NA LISTY
-    lists->distributorsList = NULL;
-    lists->clientsList = NULL;
-    lists->productsList = NULL;
+void listInitialize(listsPointers *listy)
+{
+    listy->distributorsList = NULL;
+    listy->clientsList = NULL;
+    listy->productsList = NULL;
 }

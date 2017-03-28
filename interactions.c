@@ -4,20 +4,25 @@
 //
 //
 
-void menu(int opt)
+void menu(short opt)
 {
-    printf("\t1. Dodac klienta\n");
-    printf("\t2. Dodac dostawce\n");
-    printf("\t3. Usunac klienta\n");
-    printf("\t4. Usunac dostawce\n");
+    printf("Wybierz co chcesz zrobic:\n");
+    printf("1.\tDodac klienta\n");
+    printf("2.\tDodac dostawce\n");
+    printf("3.\tUsunac klienta\n");
+    printf("4.\tUsunac dostawce\n");
+    printf("5.\tDodac produkt do magazynu\n");
+    printf("6.\tUsunac produkt z magazynu\n");
     while(1)
     {
-        scanf("%d", &opt);
-        printf("Wybrales: %d", opt);
-        if(opt>=1 && opt<=4){
+        scanf("%hi", &opt);
+        printf("Wybrales: %hi\n", opt);
+        if(opt>=1 && opt<=6){
             puts("siema");
             break;
-        }else
+        }else{
+            printf("Cos poszlo nie tak! Wybierz ponownie co chcesz zrobic.\n");
             continue;
+        }
     }
 }
