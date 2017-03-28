@@ -1,20 +1,19 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "structures.c"
 
 int main()
 {
-    printf("Program obslugi sklepu.\n\n");
-    printf("Wybierz co chcesz zrobic:\n");
-    short option;
-    options(&option);
-    struct listOfDistributors distributor;
-    struct listOfClients client;
+    listsPointers listy;
+    listInitialize(&listy);
+    int elo;
+    menu(elo);
 
     return 0;
 }
 
-void options(short *opt)
+void menu(int opt)
 {
     printf("\t1. Dodac klienta\n");
     printf("\t2. Dodac dostawce\n");
@@ -24,8 +23,11 @@ void options(short *opt)
     {
         scanf("%d", opt);
         printf("Wybrales: %d", opt);
-        if(opt>=1 && opt<=4)
+        if(opt>=1 && opt<=4){
+            puts("siema");
             break;
+        }else
+            continue;
     }
 }
 

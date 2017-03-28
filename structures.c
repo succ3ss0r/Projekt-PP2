@@ -1,4 +1,4 @@
-//
+﻿//
 //
 //  PLIK ZAWIERAJĄCY STRUKTURY POTRZEBNE DO DZIAŁANIA PROGRAMU
 //
@@ -11,7 +11,7 @@ typedef struct {
     short nip;
     char *phone;
     char *email;
-} listOfDistributors;
+} distributor;
 
 typedef struct {
     //struktura przeznaczona do trzymania informacji o klientach
@@ -19,7 +19,7 @@ typedef struct {
     char *surname;
     char *phone;
     char *email;
-} listOfClients;
+} client;
 
 typedef struct {
     //tablica przeznaczona do trzymania informacji o produktach
@@ -30,8 +30,15 @@ typedef struct {
 
 typedef struct {
     //struktura przechowujaca wskazniki na listy
-    listOfDistributors* distributorsList;
-    listOfClients* clientsList;
+    distributor* distributorsList;
+    client* clientsList;
     productElement* productsList;
 
 } listsPointers;
+
+void listInitialize(listsPointers *listy)
+{
+    listy->distributorsList = NULL;
+    listy->clientsList = NULL;
+    listy->productsList = NULL;
+}
