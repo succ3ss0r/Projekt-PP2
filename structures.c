@@ -6,6 +6,7 @@
 
 typedef struct {
     //struktura przeznaczona do trzymania informacji o dostawcach
+    unsigned int distributorID;
     char *name;
     char *address;
     short nip;
@@ -15,6 +16,7 @@ typedef struct {
 
 typedef struct {
     //struktura przeznaczona do trzymania informacji o klientach
+    unsigned int clientID;
     char *name;
     char *surname;
     char *phone;
@@ -23,6 +25,7 @@ typedef struct {
 
 typedef struct {
     //tablica przeznaczona do trzymania informacji o produktach
+    unsigned int productID;
     char *name;
     unsigned int available;
     float price;
@@ -33,12 +36,16 @@ typedef struct {
     distributor* distributorsList;
     client* clientsList;
     productElement* productsList;
-
 } listsPointers;
 
-void listInitialize(listsPointers *listy)
-{
-    listy->distributorsList = NULL;
-    listy->clientsList = NULL;
-    listy->productsList = NULL;
+void listInitialize(listsPointers *lists) {
+    //FUNKCJA INICJUJĄCA STRUKTURĘ PUSTYCH WSKAŹNIKÓW NA LISTY
+    lists->distributorsList = NULL;
+    lists->clientsList = NULL;
+    lists->productsList = NULL;
 }
+
+
+
+
+
