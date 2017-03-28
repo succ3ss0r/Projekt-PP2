@@ -5,63 +5,56 @@
 //
 
 
-
 typedef enum {
     //enum potrzebny do wykluczania dystrybutorow, klientow i produktow zamiast ich usuwania
 
     false,
     true
+
 } bool;
 
 typedef struct {
     //struktura przeznaczona do trzymania informacji o dostawcach
-<<<<<<< HEAD
 
     unsigned int distributorID;
     bool state;
 
-
-=======
->>>>>>> 659b623bd0c91ed1840a38cfed3f37e458c0af34
     char *name;
+    char *surname;
     char *address;
     short nip;
     char *phone;
     char *email;
+
+    distributor* next;
 } distributor;
 
 typedef struct {
     //struktura przeznaczona do trzymania informacji o klientach
-<<<<<<< HEAD
 
     unsigned int clientID;
     bool state;
 
-
-=======
->>>>>>> 659b623bd0c91ed1840a38cfed3f37e458c0af34
     char *name;
     char *surname;
     char *phone;
     char *email;
 
-
+    client* next;
 } client;
 
 typedef struct {
     //tablica przeznaczona do trzymania informacji o produktach
-<<<<<<< HEAD
 
     unsigned int productID;
     bool state;
 
-
-=======
->>>>>>> 659b623bd0c91ed1840a38cfed3f37e458c0af34
     char *name;
     unsigned int available;
     float price;
-} productElement;
+
+    product* next;
+} product;
 
 typedef struct {
     //struktura przechowujaca wskazniki na listy
@@ -72,9 +65,9 @@ typedef struct {
 
 } listsPointers;
 
-void listInitialize(listsPointers *listy)
+void listInitialize(listsPointers *lists)
 {
-    listy->distributorsList = NULL;
-    listy->clientsList = NULL;
-    listy->productsList = NULL;
+    lists->distributorsList = NULL;
+    lists->clientsList = NULL;
+    lists->productsList = NULL;
 }
