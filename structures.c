@@ -26,7 +26,7 @@ typedef struct {
     char *phone;
     char *email;
 
-    distributor* next;
+    struct distributor* next;
 } distributor;
 
 typedef struct {
@@ -40,7 +40,7 @@ typedef struct {
     char *phone;
     char *email;
 
-    client* next;
+    struct client* next;
 } client;
 
 typedef struct {
@@ -53,7 +53,7 @@ typedef struct {
     unsigned int available;
     float price;
 
-    product* next;
+    struct product* next;
 } product;
 
 typedef struct {
@@ -61,12 +61,11 @@ typedef struct {
 
     distributor* distributorsList;
     client* clientsList;
-    productElement* productsList;
+    product* productsList;
 
 } listsPointers;
 
-void listInitialize(listsPointers *lists)
-{
+void listInitialize(listsPointers *lists){
     lists->distributorsList = NULL;
     lists->clientsList = NULL;
     lists->productsList = NULL;
