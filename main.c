@@ -3,18 +3,10 @@
 
 #define LENGTH 20
 
-typedef enum {
-    //enum potrzebny do wykluczania dystrybutorow, klientow i produktow zamiast ich usuwania
-
-    false,
-    true
-
-} bool;
-
 struct sProducts{
     //struktura przeznaczona do trzymania informacji o klientach
 
-    bool state;
+    int productID;
 
     char name[LENGTH];
     int amount;
@@ -23,26 +15,52 @@ struct sProducts{
     struct sProducts *next;
 };
 
+void checkLastID(FILE* fileID, struct sProducts *tmp){
+
+    fileID = fopen("lastid.txt", "r");
+
+    int id;
+    fscanf(fileID, "%d", &id);
+    tmp->productID = id;
+
+    fclose(fileID);
+
+}
+
 void addClient(struct sProducts *tmp){
 
-    tmp->state = true;
     printf("Wprowadz nazwe produktu: ");
-    scanf("%s", tmp->name);
+    fflush(stdin);
+    fgets(tmp->name, LENGTH, stdin);
     printf("Wprowadz ilosc sztuk: ");
     scanf("%d", &(tmp->amount));
     printf("Wprowadz cene produktu: ");
     scanf("%f", &(tmp->price));
+    (tmp->productID)++;
 
 }
 
-void saveInFile(FILE* file, struct sProducts *tmp){
+void saveInFile(FILE* file, FILE* lastID, struct sProducts *tmp){
 
     file = fopen("products.txt", "a+");
+    lastID = fopen("lastid.txt", "w");
 
-    fprintf(file, "%s ", tmp->name);
-    fprintf(file, "%d ", tmp->amount);
-    fprintf(file, "%.2f ", tmp->price);
-    fprintf(file, "\n");
+
+    fprintf(lastID, "%d", tmp->productID);
+    fprintf(file, "%s", tmp->name);
+    fprintf(file, "%d\n", tmp->amount);
+    fprintf(file, "%.2f\n", tmp->price);
+
+    fclose(lastID);
+    fclose(file);
+
+}
+
+void printFile(FILE* file, struct sProducts *tmp){
+
+    file = fopen("products.txt", "r");
+
+
 
     fclose(file);
 
@@ -51,12 +69,12 @@ void saveInFile(FILE* file, struct sProducts *tmp){
 short menu(void){
 
     printf("0. Wyjscie\n");
-    printf("1. Dodac klienta\n");
-    printf("2. Usunac klienta\n");
-    printf("3. Dodac dostawce\n");
-    printf("4. Usunac dostawce\n");
-    printf("5. Dodac produkt do magazynu\n");
-    printf("6. Usunac produkt z magazynu\n");
+    printf("1. Dodac produkt\n");
+    printf("2. Usunac produkt\n"); //wykorzystac funkcje fseek()
+    printf("3. Wyswietlic produkty\n"); //czytac po jednej linii
+    printf("4. Edytowac produkt\n");
+    printf("5. \n");
+    printf("6. \n");
     printf("Wybierz co chcesz zrobic: ");
     short opt;
     while(1){
@@ -76,16 +94,18 @@ short menu(void){
 
 int main(void)
 {
-    struct sProducts *new_client = (struct sProducts *)malloc(sizeof(struct sProducts));
-    FILE *clients;
+    struct sProducts *front = (struct sProducts *)malloc(sizeof(struct sProducts));
+    FILE *products, *lastID;
     short option = menu();
+
     if(!option)
         return -1;
     else{
         switch(option){
             case 1:
-                addClient(new_client);
-                saveInFile(clients, new_client);
+                checkLastID(lastID, front);
+                addClient(front);
+                saveInFile(products, lastID, front);
                 break;
             case 2:
                 //delClient(&listy);
