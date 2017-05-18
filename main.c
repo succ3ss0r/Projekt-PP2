@@ -13,6 +13,7 @@ struct sProducts{
     float price;
 
     struct sProducts *next;
+
 };
 
 void checkLastID(FILE* fileID, struct sProducts *tmp){
@@ -47,6 +48,7 @@ void saveInFile(FILE* file, FILE* lastID, struct sProducts *tmp){
 
 
     fprintf(lastID, "%d", tmp->productID);
+    fprintf(file, "%d", tmp->productID);
     fprintf(file, "%s", tmp->name);
     fprintf(file, "%d\n", tmp->amount);
     fprintf(file, "%.2f\n", tmp->price);
@@ -96,35 +98,38 @@ int main(void)
 {
     struct sProducts *front = (struct sProducts *)malloc(sizeof(struct sProducts));
     FILE *products, *lastID;
-    short option = menu();
 
-    if(!option)
-        return -1;
-    else{
-        switch(option){
-            case 1:
-                checkLastID(lastID, front);
-                addClient(front);
-                saveInFile(products, lastID, front);
-                break;
-            case 2:
-                //delClient(&listy);
-                break;
-            case 3:
-                //addDistrib(listy, distrib);
-                break;
-            case 4:
-                //delDistrib(listy, distrib);
-                break;
-            case 5:
-                //addProd(listy, prod);
-                break;
-            case 6:
-                //delProd(listy, prod);
-                break;
-            default:
-                printf("Wystapil blad, program zostanie zakonczony.");
-                option = 0;
+    while(1){
+        short option = menu();
+
+        if(!option)
+            return -1;
+        else{
+            switch(option){
+                case 1:
+                    checkLastID(lastID, front);
+                    addClient(front);
+                    saveInFile(products, lastID, front);
+                    break;
+                case 2:
+                    //delClient(&listy);
+                    break;
+                case 3:
+                    //addDistrib(listy, distrib);
+                    break;
+                case 4:
+                    //delDistrib(listy, distrib);
+                    break;
+                case 5:
+                    //addProd(listy, prod);
+                    break;
+                case 6:
+                    //delProd(listy, prod);
+                    break;
+                default:
+                    printf("Wystapil blad, program zostanie zakonczony.");
+                    option = 0;
+            }
         }
     }
 
