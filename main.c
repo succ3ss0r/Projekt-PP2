@@ -20,9 +20,10 @@ struct sProducts{
 
 int checkLastID(FILE* fileID){
 
+    int id;
+
     fileID = fopen("lastid.txt", "r");
 
-    int id;
     fscanf(fileID, "%d", &id);
 
     fclose(fileID);
@@ -51,10 +52,10 @@ void saveInFile(FILE* file, FILE* lastID, struct sProducts *tmp){
 
 
     fprintf(lastID, "%d", tmp->productID);
-    fprintf(file, "%d\n", tmp->productID);
-    fprintf(file, "%s", tmp->name);
-    fprintf(file, "%d\n", tmp->amount);
-    fprintf(file, "%.2f\n", tmp->price);
+    fwrite(&(tmp->productID), 1, sizeof(int), file);
+    fwrite(tmp->name, 1, LENGTH, file);
+    fwrite(&(tmp->amount), 1, sizeof(int), file);
+    fwrite(&(tmp->price), 1, sizeof(float), file);
 
     fclose(lastID);
     fclose(file);
@@ -89,14 +90,17 @@ void loadList(struct sProducts *first, FILE* lastID){
 
 }
 
-int searchForProduct(struct sProducts *first){
-
-    char product[LENGTH];
-    int id;
+void searchProductNamed(char product[LENGTH]){
 
     printf("Jakiego produktu szukasz? ");
     fflush(stdin);
     fgets(product, LENGTH, stdin);
+
+}
+
+int searchForProduct(struct sProducts *first, char product[LENGTH]){
+
+    int id;
 
     if(first){
         if(strcmp(first->name, product) == 0){
@@ -104,30 +108,24 @@ int searchForProduct(struct sProducts *first){
 
             return id;
         }else{
-            searchForProduct(first->next);
-            printf("Nie znaleziono produktu.\n");
-
-            return -1;
+            searchForProduct(first->next, product);
         }
     }
+
     return -1;
 }
 
 void printFile(FILE* file, struct sProducts *first){
 
-    file = fopen("products.txt", "r");
-
     if(first != NULL){
         if(first->state){
-            printf("ID: %d\n", first->productID);
-            printf("Nazwa: %s", first->name);
-            printf("Ilosc: %d\n", first->amount);
-            printf("Cena za sztuke: %f\n", first->price);
+            fread(&(first->productID), 1, sizeof(int), file);
+            fread(first->name, 1, sizeof(first->name), file);
+            fread(&(first->amount), 1, sizeof(int), file);
+            fread(&(first->price), 1, sizeof(float), file);
             printFile(file, first->next);
         }
     }
-
-    fclose(file);
 
 }
 
@@ -166,6 +164,7 @@ int main(void)
     struct sProducts *first = (struct sProducts *)malloc(sizeof(struct sProducts));
     FILE *products, *lastID;
     int id;
+    char product[LENGTH];
 
     //loadList(first, lastID);
     //checkAmount(first);
@@ -189,7 +188,10 @@ int main(void)
                     //delProd();
                     break;
                 case 3:
+                    products = fopen("products.txt", "a+");
+                    rewind(products);
                     printFile(products, first);
+                    fclose(products);
                     break;
                 case 4:
                     //plusProd();
@@ -198,8 +200,12 @@ int main(void)
                     //minusProd();
                     break;
                 case 6:
-                    id = searchForProduct(first);
-                    printf("Produkt ktorego szukasz ma id %d\n", id);
+                    searchProductNamed(product);
+                    id = searchForProduct(first, product);
+                    if(id > 0)
+                        printf("Produkt ktorego szukasz ma id %d\n", id);
+                    else
+                        printf("Nie znaleziono produktu.\n");
                     break;
                 default:
                     printf("Wystapil blad, program zostanie zakonczony.");
