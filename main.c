@@ -42,6 +42,7 @@ void addProduct(struct sProducts *tmp, int id){
     printf("Wprowadz cene produktu: ");
     scanf("%f", &(tmp->price));
     (tmp->productID)++;
+    tmp->state = true;
 
 }
 
@@ -50,9 +51,9 @@ void saveInFile(FILE* file, FILE* lastID, struct sProducts *tmp){
     file = fopen("products.txt", "a+");
     lastID = fopen("lastid.txt", "w");
 
-
     fprintf(lastID, "%d", tmp->productID);
     fwrite(&(tmp->productID), 1, sizeof(int), file);
+    fwrite(&(tmp->state), 1, sizeof(bool), file);
     fwrite(tmp->name, 1, LENGTH, file);
     fwrite(&(tmp->amount), 1, sizeof(int), file);
     fwrite(&(tmp->price), 1, sizeof(float), file);
@@ -74,7 +75,7 @@ void checkAmount(struct sProducts *first){
     }
 }
 
-void loadList(struct sProducts *first, FILE* lastID){
+void loadList(struct sProducts *first, FILE* file, FILE* lastID){
 
     lastID = fopen("lastid.txt", "r");
 
@@ -85,7 +86,9 @@ void loadList(struct sProducts *first, FILE* lastID){
     if(id == 0)
         return;
     else{
+        file = fopen("products.txt", "r");
 
+        fclose(file);
     }
 
 }
@@ -115,15 +118,15 @@ int searchForProduct(struct sProducts *first, char product[LENGTH]){
     return -1;
 }
 
-void printFile(FILE* file, struct sProducts *first){
+void printAvalibleProducts(struct sProducts *first){
 
     if(first != NULL){
         if(first->state){
-            fread(&(first->productID), 1, sizeof(int), file);
-            fread(first->name, 1, sizeof(first->name), file);
-            fread(&(first->amount), 1, sizeof(int), file);
-            fread(&(first->price), 1, sizeof(float), file);
-            printFile(file, first->next);
+            printf("ID:\t%d\n", first->productID);
+            printf("Nazwa:\t%s", first->name);
+            printf("Ilosc:\t%d\n", first->amount);
+            printf("Cena za sztuke:\t%f\n", first->price);
+            printAvalibleProducts(first->next);
         }
     }
 
@@ -162,12 +165,9 @@ short opt(void){
 int main(void)
 {
     struct sProducts *first = (struct sProducts *)malloc(sizeof(struct sProducts));
-    FILE *products, *lastID;
+    FILE *f_products, *f_lastID;
     int id;
     char product[LENGTH];
-
-    //loadList(first, lastID);
-    //checkAmount(first);
 
     menu();
 
@@ -180,23 +180,31 @@ int main(void)
         else{
             switch(option){
                 case 1:
-                    id = checkLastID(lastID);
+                    id = checkLastID(f_lastID);
                     addProduct(first, id);
-                    saveInFile(products, lastID, first);
+                    saveInFile(f_products, f_lastID, first);
                     break;
                 case 2:
+                    //id = checkLastID();
+                    //loadList(first, f_products, f_lastID);
                     //delProd();
                     break;
                 case 3:
-                    products = fopen("products.txt", "a+");
-                    rewind(products);
-                    printFile(products, first);
-                    fclose(products);
+                    //id = checkLastID();
+                    //loadList(first, f_products, f_lastID);
+                    f_products = fopen("products.txt", "a+");
+                    rewind(f_products);
+                    printAvalibleProducts(first);
+                    fclose(f_products);
                     break;
                 case 4:
+                    //id = checkLastID();
+                    //loadList(first, f_products, f_lastID);
                     //plusProd();
                     break;
                 case 5:
+                    //id = checkLastID();
+                    //loadList(first, f_products, f_lastID);
                     //minusProd();
                     break;
                 case 6:
