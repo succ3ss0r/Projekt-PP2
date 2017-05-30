@@ -132,6 +132,21 @@ void printAvalibleProducts(struct sProducts *first){
 
 }
 
+void saveUpdatedList(struct sProducts *first, FILE* file){
+
+    if(first == NULL)
+        return;
+    else{
+        fwrite(&(first->productID), 1, sizeof(int), file);
+        fwrite(&(first->state), 1, sizeof(bool), file);
+        fwrite(first->name, 1, LENGTH, file);
+        fwrite(&(first->amount), 1, sizeof(int), file);
+        fwrite(&(first->price), 1, sizeof(float), file);
+        saveUpdatedList(first->next, file);
+    }
+
+}
+
 void menu(void){
 
     printf("0. Wyjscie\n");
@@ -183,11 +198,14 @@ int main(void)
                     id = checkLastID(f_lastID);
                     addProduct(first, id);
                     saveInFile(f_products, f_lastID, first);
+                    //loadList(first, f_products, f_lastID);
+                    //saveUpdatedList(first, f_products);
                     break;
                 case 2:
                     //id = checkLastID();
                     //loadList(first, f_products, f_lastID);
                     //delProd();
+                    //saveUpdatedList(first, f_products);
                     break;
                 case 3:
                     //id = checkLastID();
@@ -201,11 +219,13 @@ int main(void)
                     //id = checkLastID();
                     //loadList(first, f_products, f_lastID);
                     //plusProd();
+                    //saveUpdatedList(first, f_products);
                     break;
                 case 5:
                     //id = checkLastID();
                     //loadList(first, f_products, f_lastID);
                     //minusProd();
+                    //saveUpdatedList(first, f_products);
                     break;
                 case 6:
                     searchProductNamed(product);
