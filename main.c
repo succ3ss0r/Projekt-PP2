@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdbool.h>
 
 #define LENGTH 20
@@ -132,18 +133,27 @@ void printAvalibleProducts(struct sProducts *first){
 
 }
 
-void saveUpdatedList(struct sProducts *first, FILE* file){
+void saveUpdatedList(struct sProducts *first, char *name){
 
-    if(first == NULL)
-        return;
-    else{
+    FILE *file = fopen(name, "a+");
+    unsigned int iloscRekordow = 0;
+    fwrite(&iloscRekordow, 1, sizeof(unsigned int), file);
+
+
+    while(first) {
         fwrite(&(first->productID), 1, sizeof(int), file);
         fwrite(&(first->state), 1, sizeof(bool), file);
         fwrite(first->name, 1, LENGTH, file);
         fwrite(&(first->amount), 1, sizeof(int), file);
         fwrite(&(first->price), 1, sizeof(float), file);
-        saveUpdatedList(first->next, file);
+
+        first = first->next;
+        iloscRekordow++;
     }
+    rewind(file);
+    fwrite(&iloscRekordow, 1, sizeof(unsigned int), file);
+
+    fclose(file);
 
 }
 
@@ -180,7 +190,7 @@ short opt(void){
 int main(void)
 {
     struct sProducts *first = (struct sProducts *)malloc(sizeof(struct sProducts));
-    FILE *f_products, *f_lastID;
+    FILE *f_products = NULL, *f_lastID = NULL;
     int id;
     char product[LENGTH];
 
