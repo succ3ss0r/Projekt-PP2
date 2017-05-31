@@ -19,6 +19,19 @@ struct sProducts{
 
 };
 
+bool addToList(struct sProducts *first, struct sProducts *tmp) {
+    if(!tmp)
+        return true;
+
+    struct sProducts *q = first;
+    while(q->next)
+        q = q->next;
+
+    q->next = tmp;
+
+    return false;
+}
+
 int checkLastID(FILE* fileID){
 
     int id;
@@ -32,19 +45,24 @@ int checkLastID(FILE* fileID){
     return id;
 }
 
-void addProduct(struct sProducts *tmp, int id){
+void addProduct(struct sProducts *first, int *id) {
 
-    tmp->productID = id;
+    struct sProducts *tmp = (struct sProducts *)calloc(1, sizeof(struct sProducts));
+
+    tmp->productID = ++(*id);
     printf("Wprowadz nazwe produktu: ");
     fflush(stdin);
+    fgets(tmp->name, LENGTH, stdin);
     fgets(tmp->name, LENGTH, stdin);
     printf("Wprowadz ilosc sztuk: ");
     scanf("%d", &(tmp->amount));
     printf("Wprowadz cene produktu: ");
     scanf("%f", &(tmp->price));
-    (tmp->productID)++;
     tmp->state = true;
 
+    if( addToList(first, tmp) )
+    //jeżeli błąd
+        free(tmp);
 }
 
 void saveInFile(FILE* file, FILE* lastID, struct sProducts *tmp){
@@ -77,21 +95,6 @@ void checkAmount(struct sProducts *first){
 }
 
 void loadList(struct sProducts *first, FILE* file, FILE* lastID){
-
-    lastID = fopen("lastid.txt", "r");
-
-    int id = checkLastID(lastID);
-
-    fclose(lastID);
-
-    if(id == 0)
-        return;
-    else{
-        file = fopen("products.txt", "r");
-
-        fclose(file);
-    }
-
 }
 
 void searchProductNamed(char product[LENGTH]){
@@ -119,18 +122,16 @@ int searchForProduct(struct sProducts *first, char product[LENGTH]){
     return -1;
 }
 
-void printAvalibleProducts(struct sProducts *first){
-
-    if(first != NULL){
-        if(first->state){
+void printAvalibleProducts(const struct sProducts *first){
+    while(first) {
+        if(first->state) {
             printf("ID:\t%d\n", first->productID);
             printf("Nazwa:\t%s", first->name);
             printf("Ilosc:\t%d\n", first->amount);
             printf("Cena za sztuke:\t%f\n", first->price);
-            printAvalibleProducts(first->next);
         }
+        first = first->next;
     }
-
 }
 
 void saveUpdatedList(struct sProducts *first, char *name){
@@ -189,9 +190,9 @@ short opt(void){
 
 int main(void)
 {
-    struct sProducts *first = (struct sProducts *)malloc(sizeof(struct sProducts));
+    struct sProducts *first = (struct sProducts *)calloc(1, sizeof(struct sProducts));
     FILE *f_products = NULL, *f_lastID = NULL;
-    int id;
+    int id = checkLastID(f_lastID);
     char product[LENGTH];
 
     menu();
@@ -205,8 +206,7 @@ int main(void)
         else{
             switch(option){
                 case 1:
-                    id = checkLastID(f_lastID);
-                    addProduct(first, id);
+                    addProduct(first, &id);
                     saveInFile(f_products, f_lastID, first);
                     //loadList(first, f_products, f_lastID);
                     //saveUpdatedList(first, f_products);
