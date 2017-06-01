@@ -105,7 +105,6 @@ int searchForProduct(struct sProducts *first){
     int id;
     char product[LENGTH];
 
-    printf("Jakiego produktu szukasz? ");
     fflush(stdin);
     fgets(product, LENGTH, stdin);
 
@@ -121,13 +120,21 @@ int searchForProduct(struct sProducts *first){
     return -1;
 }
 
-void delProduct(struct sProducts *first, char product[LENGTH]){
+void delProduct(struct sProducts *first, int id){
+
+    while(first){
+        if(first->productID == id){
+            first->state = false;
+            break;
+        }
+        first = first->next;
+    }
 
 }
 
 void printAvalibleProducts(const struct sProducts *first){
-    while(first) {
-        if(first->state) {
+    while(first){
+        if(first->state){
             printf("ID:\t%d\n", first->productID);
             printf("Nazwa:\t%s", first->name);
             printf("Ilosc:\t%d\n", first->amount);
@@ -141,7 +148,7 @@ void saveUpdatedList(struct sProducts *first, char *name){
 
     FILE *file = fopen(name, "a+");
 
-    while(first) {
+    while(first){
         fwrite(&(first->productID), 1, sizeof(int), file);
         fwrite(&(first->state), 1, sizeof(bool), file);
         fwrite(first->name, 1, LENGTH, file);
@@ -210,6 +217,14 @@ int main(void)
                     saveUpdatedList(first, "products.txt");
                     break;
                 case 2:
+                    printf("Jakiego produkt chcesz usunac? ");
+                    id = searchForProduct(first);
+                    if(id > 0)
+                        printf("Usuniety produkt mial id: %d\n", id);
+                    else
+                        printf("Nie mozna usunac produktu poniewaz go nie ma w bazie.\n");
+                    delProduct(first, id);
+                    saveUpdatedList(first, "products.txt");
                     break;
                 case 3:
                     f_products = fopen("products.txt", "a+");
@@ -222,6 +237,7 @@ int main(void)
                 case 5:
                     break;
                 case 6:
+                    printf("Jakiego produktu szukasz? ");
                     id = searchForProduct(first);
                     if(id > 0)
                         printf("Produkt ktorego szukasz ma id %d\n", id);
