@@ -209,7 +209,7 @@ short opt(void){
 int main(void)
 {
     struct sProducts *first = (struct sProducts *)calloc(1, sizeof(struct sProducts));
-    FILE *f_products = NULL, *f_lastID = NULL;
+    FILE *f_lastID = NULL;
     int id;
 
     //loadList(first, "products.txt");
@@ -246,8 +246,10 @@ int main(void)
                     printAvalibleProducts(first);
                     break;
                 case 4:
+                    //loadList(first, "products.txt");
                     break;
                 case 5:
+                    //loadList(first, "products.txt");
                     break;
                 case 6:
                     printf("Jakiego produktu szukasz? ");
