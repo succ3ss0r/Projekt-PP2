@@ -263,6 +263,7 @@ int main(void)
             }
         }
     }
+    removeList(&first);
 
     return 0;
 }
