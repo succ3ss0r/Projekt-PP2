@@ -78,7 +78,7 @@ void checkAmount(struct sProducts *first){
     if(first){
         if(first->amount < 20){
             printf("Ilosc %s wynosi %d ( dopuszczalna minimalna ilosc w magazynie to 20 )\n", first->name, first->amount);
-            printf("Nalezy zamowic wiecej %s", first->name);
+            printf("Nalezy zamowic wiecej %s\n\n", first->name);
             checkAmount(first->next);
         }else
             checkAmount(first->next);
@@ -87,7 +87,8 @@ void checkAmount(struct sProducts *first){
 
 void loadList(struct sProducts *first, char *f_name){
 
-    FILE* file = fopen(f_name, "a");
+    FILE* file = fopen(f_name, "r+b");
+    rewind(file);
 
     while(!feof(file)){
         struct sProducts *tmp = (struct sProducts *)malloc(sizeof(struct sProducts));
@@ -146,7 +147,7 @@ void printAvalibleProducts(const struct sProducts *first){
 
 void saveUpdatedList(struct sProducts *first, char *name){
 
-    FILE *file = fopen(name, "a+");
+    FILE *file = fopen(name, "w+b");
 
     while(first){
         fwrite(&(first->productID), 1, sizeof(int), file);
@@ -160,6 +161,19 @@ void saveUpdatedList(struct sProducts *first, char *name){
 
     fclose(file);
 
+}
+
+void removeList(struct sProducts **first){
+    if (NULL == *first)
+        return;
+
+    do
+    {
+        struct sProducts *next = (*first)->next;
+        free(*first);
+        *first = next;
+    } while (*first != NULL);
+    *first = NULL;
 }
 
 void menu(void){
@@ -198,9 +212,10 @@ int main(void)
     FILE *f_products = NULL, *f_lastID = NULL;
     int id;
 
-    menu();
-
     //loadList(first, "products.txt");
+    checkAmount(first);
+
+    menu();
 
     while(1){
 
@@ -219,18 +234,16 @@ int main(void)
                 case 2:
                     printf("Jakiego produkt chcesz usunac? ");
                     id = searchForProduct(first);
-                    if(id > 0)
+                    if(id > 0){
+                        delProduct(first, id);
+                        saveUpdatedList(first, "products.txt");
                         printf("Usuniety produkt mial id: %d\n", id);
-                    else
+                    }else
                         printf("Nie mozna usunac produktu poniewaz go nie ma w bazie.\n");
-                    delProduct(first, id);
-                    saveUpdatedList(first, "products.txt");
                     break;
                 case 3:
-                    f_products = fopen("products.txt", "a+");
-                    rewind(f_products);
+                    //loadList(first, "products.txt");
                     printAvalibleProducts(first);
-                    fclose(f_products);
                     break;
                 case 4:
                     break;
