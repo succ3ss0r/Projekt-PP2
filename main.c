@@ -27,6 +27,7 @@ bool addToList(struct sProducts *first, struct sProducts *tmp) {
     while(q->next)
         q = q->next;
 
+    tmp->next = q->next;
     q->next = tmp;
 
     return false;
@@ -90,10 +91,9 @@ void loadList(struct sProducts *first, char *f_name){
     FILE* file = fopen(f_name, "r+b");
     rewind(file);
 
-    while(!feof(file)){
-        struct sProducts *tmp = (struct sProducts *)malloc(sizeof(struct sProducts));
-        fread(tmp, 1, sizeof(struct sProducts), file);
-        printf("XDDD");
+    struct sProducts *tmp = (struct sProducts *)malloc(sizeof(struct sProducts));
+
+    while(fread(tmp, 1, sizeof(struct sProducts), file) != EOF){
         addToList(first, tmp);
     }
 
@@ -150,12 +150,13 @@ void saveUpdatedList(struct sProducts *first, char *name){
     FILE *file = fopen(name, "w+b");
 
     while(first){
-        fwrite(&(first->productID), 1, sizeof(int), file);
-        fwrite(&(first->state), 1, sizeof(bool), file);
-        fwrite(first->name, 1, LENGTH, file);
-        fwrite(&(first->amount), 1, sizeof(int), file);
-        fwrite(&(first->price), 1, sizeof(float), file);
-
+        if(first->state){
+            fwrite(&(first->productID), 1, sizeof(int), file);
+            fwrite(&(first->state), 1, sizeof(bool), file);
+            fwrite(first->name, 1, LENGTH, file);
+            fwrite(&(first->amount), 1, sizeof(int), file);
+            fwrite(&(first->price), 1, sizeof(float), file);
+        }
         first = first->next;
     }
 
