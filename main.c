@@ -48,7 +48,7 @@ int checkLastID(char* name)
 
 void addProduct(struct sProducts *first, int *id)
 {
-    struct sProducts *tmp = (struct sProducts *)malloc(sizeof(struct sProducts));
+    struct sProducts *tmp = (struct sProducts *)calloc(1, sizeof(struct sProducts));
 
     tmp->productID = ++(*id);
     printf("Wprowadz nazwe produktu: ");
@@ -76,10 +76,10 @@ void saveLastIdInFile(char* name, int id)
 
 void checkAmount(struct sProducts *first)
 {
+    first = first->next;
     while(first){
         if(first->amount < 20){
-            printf("Ilosc %s wynosi %d ( dopuszczalna minimalna ilosc w magazynie to 20 )\n", first->name, first->amount);
-            printf("Nalezy zamowic wiecej %s\n\n", first->name);
+            printf("\nIlosc %s wynosi %d ( dopuszczalna minimalna ilosc w magazynie to 20 )\n", first->name, first->amount);
         }
         first = first->next;
     }
@@ -243,10 +243,9 @@ int main(void)
     struct sProducts *first = (struct sProducts *)calloc(1, sizeof(struct sProducts));
     int id;
 
+    menu();
     //loadList(first, "products.txt");
     checkAmount(first);
-
-    menu();
 
     while(1){
 
