@@ -46,12 +46,11 @@ int checkLastID(char* name)
     return id;
 }
 
-void addProduct(struct sProducts *first, int id)
+void addProduct(struct sProducts *first, int *id)
 {
     struct sProducts *tmp = (struct sProducts *)malloc(sizeof(struct sProducts));
 
-    tmp->productID = id;
-    (tmp->productID)++;
+    tmp->productID = ++(*id);
     printf("Wprowadz nazwe produktu: ");
     fflush(stdin);
     fgets(tmp->name, LENGTH, stdin);
@@ -259,7 +258,7 @@ int main(void)
             switch(option){
                 case 1:
                     id = checkLastID("lastid.txt");
-                    addProduct(first, id);
+                    addProduct(first, &id);
                     saveLastIdInFile("lastid.txt", id);
                     saveUpdatedList(first, "products.txt");
                     break;
