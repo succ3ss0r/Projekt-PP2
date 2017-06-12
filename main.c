@@ -78,7 +78,7 @@ void checkAmount(struct sProducts *first)
 {
     first = first->next;
     while(first){
-        if(first->amount < 20){
+        if(first->amount < 20 && first->state){
             printf("\nIlosc %s wynosi %d ( dopuszczalna minimalna ilosc w magazynie to 20 )\n", first->name, first->amount);
         }
         first = first->next;
@@ -225,8 +225,8 @@ short opt(void)
     printf("Wybierz co chcesz zrobic: ");
     short opt;
     while(1){
+        fflush(stdin);
         scanf("%hi", &opt);
-        printf("Wybrales: %hi\n", opt);
         if(opt == 0)    break;
         if(opt >= 1 && opt <= 6){
             return opt;
