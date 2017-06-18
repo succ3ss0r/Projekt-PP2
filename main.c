@@ -59,9 +59,12 @@ void addProduct(struct sProducts *first, int *id)
     printf("Wprowadz cene produktu: ");
     scanf("%f", &(tmp->price));
     tmp->state = true;
+    system("cls");
 
     if(addToList(first, tmp))
         free(tmp);
+    else
+        printf("Pomyslnie dodano produkt\n\n");
 }
 
 void saveLastIdInFile(char* name, int id)
@@ -79,7 +82,7 @@ void checkAmount(struct sProducts *first)
     first = first->next;
     while(first){
         if(first->amount < 20 && first->state){
-            printf("\nIlosc %s wynosi %d ( dopuszczalna minimalna ilosc w magazynie to 20 )\n", first->name, first->amount);
+            printf("\nIlosc %s wynosi %d ( dopuszczalna minimalna ilosc w magazynie to 20 )\n\n", first->name, first->amount);
         }
         first = first->next;
     }
@@ -92,7 +95,7 @@ void loadList(struct sProducts *first, char *f_name)
 
     struct sProducts *tmp = (struct sProducts *)malloc(sizeof(struct sProducts));
 
-    while(fread(tmp, 1, sizeof(struct sProducts), file) != EOF){
+    while(fread(tmp, 1, sizeof(struct sProducts), file) != EOF) {
         addToList(first, tmp);
     }
     fclose(file);
@@ -102,13 +105,13 @@ void expendProduct(struct sProducts *first, int id)
 {
     int amount;
 
-    while(first){
-        if(first->productID == id){
+    while(first) {
+        if(first->productID == id) {
             printf("Jaka ilosc chcesz wydac?\n");
             scanf("%d", &amount);
             if(first->amount-amount < 0)
                 printf("Nie mozna wydac takiej ilosci poniewaz nie ma tylu sztuk na magazynie.\n");
-            else{
+            else {
                 amount = first->amount - amount;
                 first->amount = amount;
                 break;
@@ -122,8 +125,8 @@ void orderProduct(struct sProducts *first, int id)
 {
     int amount;
 
-    while(first){
-        if(first->productID == id){
+    while(first) {
+        if(first->productID == id) {
             printf("Jaka ilosc chcesz zamowic?\n");
             scanf("%d", &amount);
             amount = amount + first->amount;
@@ -142,12 +145,12 @@ int searchForProduct(struct sProducts *first)
     fflush(stdin);
     fgets(product, LENGTH, stdin);
 
-    while(first){
-        if(strcmp(first->name, product) == 0 && first->state == true){
+    while(first) {
+        if(strcmp(first->name, product) == 0 && first->state == true) {
             id = first->productID;
 
             return id;
-        }else
+        } else
             first = first->next;
     }
 
@@ -156,19 +159,19 @@ int searchForProduct(struct sProducts *first)
 
 void delProduct(struct sProducts *first, int id)
 {
-    while(first){
-        if(first->productID == id){
+    while(first) {
+        if(first->productID == id) {
             first->state = false;
             break;
         }
         first = first->next;
     }
+    printf("\nPomyslnie usunieto produkt\n");
 }
-
 void printAvalibleProducts(const struct sProducts *first)
 {
-    while(first){
-        if(first->state){
+    while(first) {
+        if(first->state) {
             printf("ID:\t%d\n", first->productID);
             printf("Nazwa:\t%s", first->name);
             printf("Ilosc:\t%d\n", first->amount);
@@ -177,13 +180,12 @@ void printAvalibleProducts(const struct sProducts *first)
         first = first->next;
     }
 }
-
 void saveUpdatedList(struct sProducts *first, char *name)
 {
     FILE *file = fopen(name, "w+b");
 
-    while(first){
-        if(first->state){
+    while(first) {
+        if(first->state) {
             fwrite(&(first->productID), 1, sizeof(int), file);
             fwrite(&(first->state), 1, sizeof(bool), file);
             fwrite(first->name, 1, LENGTH, file);
@@ -194,18 +196,17 @@ void saveUpdatedList(struct sProducts *first, char *name)
     }
     fclose(file);
 }
-
 void removeList(struct sProducts **first)
 {
     if (NULL == *first)
         return;
 
-    do
-    {
+    do {
         struct sProducts *next = (*first)->next;
         free(*first);
         *first = next;
     } while (*first != NULL);
+
     *first = NULL;
 }
 
@@ -224,13 +225,13 @@ short opt(void)
 {
     printf("Wybierz co chcesz zrobic: ");
     short opt;
-    while(1){
+    while(1) {
         fflush(stdin);
         scanf("%hi", &opt);
         if(opt == 0)    break;
-        if(opt >= 1 && opt <= 6){
+        if(opt >= 1 && opt <= 6) {
             return opt;
-        }else{
+        } else {
             printf("Cos poszlo nie tak! Wybierz ponownie: ");
             continue;
         }
@@ -243,56 +244,58 @@ int main(void)
     struct sProducts *first = (struct sProducts *)calloc(1, sizeof(struct sProducts));
     int id;
 
-    menu();
     //loadList(first, "products.txt");
     checkAmount(first);
+    menu();
 
-    while(1){
-
+    while(1) {
         short option = opt();
 
         if(!option)
             return -1;
-        else{
-            switch(option){
+        else {
+            switch(option) {
                 case 1:
                     id = checkLastID("lastid.txt");
                     addProduct(first, &id);
                     saveLastIdInFile("lastid.txt", id);
                     saveUpdatedList(first, "products.txt");
+                    menu();
                     break;
                 case 2:
                     printf("Jakiego produkt chcesz usunac? ");
                     id = searchForProduct(first);
-                    if(id > 0){
+                    if(id > 0) {
                         delProduct(first, id);
                         saveUpdatedList(first, "products.txt");
-                        printf("Usuniety produkt mial id: %d\n", id);
-                    }else
-                        printf("Nie mozna usunac produktu poniewaz go nie ma w bazie.\n");
+                        printf("Usuniety produkt mial id: %d\n\n", id);
+                    } else
+                        printf("\nNie mozna usunac produktu poniewaz go nie ma w bazie.\n\n");
                     break;
                 case 3:
                     //loadList(first, "products.txt");
+                    system("cls");
                     printAvalibleProducts(first);
+                    menu();
                     break;
                 case 4:
                     //loadList(first, "products.txt");
                     printf("Jaki produkt chcesz zamowic?\n");
                     id = searchForProduct(first);
-                    if(id > 0){
+                    if(id > 0) {
                         orderProduct(first, id);
                         saveUpdatedList(first, "products.txt");
-                    }else
+                    } else
                         printf("Nie mozna zamowic produktu poniewaz go nie ma w bazie.\n");
                     break;
                 case 5:
                     //loadList(first, "products.txt");
                     printf("Jaki produkt chcesz wydac z magazynu?\n");
                     id = searchForProduct(first);
-                    if(id > 0){
+                    if(id > 0) {
                         expendProduct(first, id);
                         saveUpdatedList(first, "products.txt");
-                    }else
+                    } else
                         printf("Nie mozna wydac produktu poniewaz go nie ma w bazie.\n");
                     checkAmount(first);
                     break;
