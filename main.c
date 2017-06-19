@@ -178,13 +178,18 @@ bool addToList(struct sProducts **first, struct sProducts *tmp)
 
 int checkLastID(char* name)
 {
-    int id;
+    int id = 0;
 
-    FILE* fileID = fopen(name, "r");
+    FILE* fileID = fopen("lastid.txt", "r");
 
-    fscanf(fileID, "%d", &id);
-
-    fclose(fileID);
+    if(!fileID) {
+        fileID = fopen(name, "w");
+        fprintf(fileID, "%d", id);
+        fclose(fileID);
+    } else {
+        fscanf(fileID, "%d", &id);
+        fclose(fileID);
+    }
 
     return id;
 }
@@ -213,11 +218,7 @@ void checkAmount(struct sProducts *first)
 
 void loadList(struct sProducts **first, char *f_name)
 {
-    if(!fopen(f_name, "r+b"))
-        fopen(f_name, "w");
-
     FILE* file = fopen(f_name, "r+b");
-    rewind(file);
 
     struct sProducts *temporary = (struct sProducts *)malloc(sizeof(struct sProducts));
 
@@ -310,6 +311,9 @@ void delProduct(struct sProducts *first, int id)
 
 void printAvalibleProducts(const struct sProducts *first)
 {
+    if(!first->next)
+        printf("Baza produktow jest pusta!\n\n");
+
     while(first) {
         if(first->state) {
             printf("ID:\t%d\n", first->productID);
