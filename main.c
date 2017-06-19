@@ -213,7 +213,11 @@ void checkAmount(struct sProducts *first)
 
 void loadList(struct sProducts **first, char *f_name)
 {
+    if(!fopen(f_name, "r+b"))
+        fopen(f_name, "w");
+
     FILE* file = fopen(f_name, "r+b");
+    rewind(file);
 
     struct sProducts *temporary = (struct sProducts *)malloc(sizeof(struct sProducts));
 
