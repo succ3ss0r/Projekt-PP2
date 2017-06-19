@@ -220,6 +220,9 @@ void loadList(struct sProducts **first, char *f_name)
 {
     FILE* file = fopen(f_name, "r+b");
 
+    if(!file)
+        file = fopen(f_name, "w");
+
     struct sProducts *temporary = (struct sProducts *)malloc(sizeof(struct sProducts));
 
     while(fread(&(*temporary), sizeof(struct sProducts), 1, file) == 1) {
